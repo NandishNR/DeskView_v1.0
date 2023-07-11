@@ -34,9 +34,9 @@ io.on("connection", function (socket) {
     io.to("User" + remoteId).emit("mousemove", event);
   });
 
-  socket.on("mousedown", ({ userId, remoteId, event }) => {
-    io.to("User" + remoteId).emit("mousedown", event);
-  });
+  // socket.on("mousedown", ({ userId, remoteId, event }) => {
+  //   io.to("User" + remoteId).emit("mousedown", event);
+  // });
 
   socket.on("scroll", ({ userId, remoteId, event }) => {
     io.to("User" + remoteId).emit("scroll", event);
@@ -45,6 +45,17 @@ io.on("connection", function (socket) {
   socket.on("keydown", ({ userId, remoteId, event }) => {
     io.to("User" + remoteId).emit("keydown", event);
   });
+
+  //New events
+  socket.on('leftClick', ({ userId, remoteId, coords }) => {
+    console.log(`Server leftClick: ${coords}`);
+    io.to("User" + remoteId).emit("leftClick", coords);
+  })
+
+  socket.on('rightClick', ({ userId, remoteId, coords }) => {
+    console.log(`Server rightClick: ${coords}`);
+    io.to("User" + remoteId).emit("rightClick", coords);
+  })
 
   // socket.on("event", ({ userId, remoteId, event }) => {
   //   // Detect when user presses keys on his computer and tell the changes to other user

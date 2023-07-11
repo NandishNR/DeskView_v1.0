@@ -116,11 +116,12 @@ const ConnectionScreen = ({ callRef, socket }) => {
             dispatch(setSessionStartTime(new Date()));
             dispatch(setShowSessionDialog(true));
 
+            //TODO NANDI
             // FOR PLAYING AUDIO OF REMOTE
-            call.on("stream", function (remoteStream) {
-              remoteVideoRef.current.srcObject = remoteStream;
-              remoteVideoRef.current.play();
-            });
+            // call.on("stream", function (remoteStream) {
+            //   remoteVideoRef.current.srcObject = remoteStream;
+            //   remoteVideoRef.current.play();
+            // });
           })
           .catch((e) => console.log("Error: " + e));
       }
@@ -167,11 +168,11 @@ const ConnectionScreen = ({ callRef, socket }) => {
     <div className="h-screen flex">
       <div className="bg-sky-500 text-white basis-1/2 flex items-center justify-center">
         <div className="w-1/2 flex flex-col items-center justify-center">
-          <img
+          {/* <img
             src="/img/deskviewer_logo_transparent.png"
             className="w-1/2"
             alt="logo"
-          />
+          /> */}
           <div className="font-semibold text-3xl mt-4">DeskViewer</div>
           <div className="font-regular text-md">Version 1.0</div>
         </div>

@@ -16,23 +16,21 @@ function createWindow() {
     },
   });
 
-  win
-    .loadURL("http://localhost:3000")
+  //win.loadURL("http://localhost:3000")
 
-    //win.loadURL(`file://${path.join(__dirname, "../build/index.html")}`)
-    .then(() => {
-      console.log("Window loaded, URL: " + win.webContents.getURL());
-      desktopCapturer
-        .getSources({ types: ["screen"] })
-        .then(async (sources) => {
-          for (const source of sources) {
-            // TODO: Add if condition for multiple sources
-            console.log("Sources available: " + source.id);
-            console.log("Source id sent: " + source.id);
-            win.webContents.send("SET_SOURCE", source.id);
-          }
-        });
-    });
+  win.loadURL(`file://${path.join(__dirname, "../build/index.html")}`)
+  .then(() => {
+    console.log("Window loaded, URL: " + win.webContents.getURL());
+    desktopCapturer.getSources({ types: ["screen"] })
+      .then(async (sources) => {
+        for (const source of sources) {
+          // TODO: Add if condition for multiple sources
+          console.log("Sources available: " + source.id);
+          console.log("Source id sent: " + source.id);
+          win.webContents.send("SET_SOURCE", source.id);
+        }
+      });
+  });
 }
 
 app.whenReady().then(createWindow);
@@ -49,6 +47,26 @@ app.on("activate", () => {
   }
 });
 
+// console.log("Registering events");
+// var video = document.querySelector('video');
+// class coordsAndSize {
+//     constructor(event, video) {
+//         this.x = event.clientX - video.getBoundingClientRect().left;
+//         this.y = event.clientY - video.getBoundingClientRect().top;
+//         this.videoWidth = video.getBoundingClientRect().width;
+//         this.videoHeight = video.getBoundingClientRect().height;
+//     }
+// }
+
+// video.addEventListener('click', function (event) {
+//     socket.emit('leftClick', new coordsAndSize(event, video));
+// })
+
+// video.addEventListener('contextmenu', function (event) {
+//     event.preventDefault();
+//     socket.emit('rightClick', new coordsAndSize(event, video));
+// })
+
 // --------- HANDLE KEYBOARD AND MOUSE EVENTS -------
 
 //robot.moveMouseSmooth(100, 180);
@@ -58,20 +76,41 @@ app.on("activate", () => {
 
 ipcMain.on("mousemove", (event, args) => {
   //console.log(`Mousemove: x=${args.x} y=${args.y}`);
-  //robot.moveMouseSmooth(args.x, args.y);
+  robot.moveMouseSmooth(args.x, args.y);
 });
 
-ipcMain.on("mousedown", (event, args) => {
-  //console.log(`Mouse down: ${args.button}`);
-  //robot.mouseClick();
-});
+// ipcMain.on("mousedown", (event, args) => {
+//   console.log(`Mouse down: ${args.button}`);
+//   robot.mouseClick();
+// });
 
 ipcMain.on("scroll", (event, args) => {
-  //console.log(`Scroll: ${args.scroll}`);
-  //robot.scrollMouse(0, args.scroll);
+  console.log(`Scroll: ${args.scroll}`);
+  robot.scrollMouse(0, args.scroll);
 });
 
 ipcMain.on("keydown", (event, args) => {
-  //console.log(`Key pressed: ${args.keyCode}`);
-  //robot.keyTap("command");
+  console.log(`Key pressed: ${args.keyCode}`);
+  robot.keyTap("control");
 });
+
+ipcMain.on("leftClick", (coords) => {
+  console.log(`electron.js leftClick: ${coords}` );
+  robot.moveMouse(convertCoord(coords, 'x'), convertCoord(coords, 'y'));
+});
+
+ipcMain.on("rightClick", (coords) => {
+  console.log(`electron.js rightClick: ${coords}` );
+  robot.moveMouse(convertCoord(coords, 'x'), convertCoord(coords, 'y'));
+  robot.mouseClick('right');
+});
+
+function convertCoord(coords, xy) {
+  if (xy === 'x') {
+      return (robot.getScreenSize().width * coords.x) / coords.videoWidth;
+  } else if (xy === 'y') {
+      return (robot.getScreenSize().height * coords.y) / coords.videoHeight;
+  } else {
+      return;
+  }
+}

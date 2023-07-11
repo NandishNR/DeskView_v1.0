@@ -49,6 +49,18 @@ const AppScreen = ({ callRef, socket, sessionEnded }) => {
   // Handling key press
   useEffect(() => {
     if (socket) {
+
+      class coordsAndSize {
+        constructor(event, video) {
+            this.x = event.clientX - video.getBoundingClientRect().left;
+            this.y = event.clientY - video.getBoundingClientRect().top;
+            this.videoWidth = video.getBoundingClientRect().width;
+            this.videoHeight = video.getBoundingClientRect().height;
+        }
+      }
+      
+      var video = document.getElementById('display');
+      console.log(`Video object: ${video}`);
       // -------- MOUSE CURSOR COORDINATES -------
       let mousePos = null;
       let lastPos = null;
@@ -69,13 +81,13 @@ const AppScreen = ({ callRef, socket, sessionEnded }) => {
       }, 100);
 
       // -------- MOUSE LMB (0), MMB (1), RMB (2) CLICK -------
-      document.addEventListener("mousedown", (e) => {
-        socket.emit("mousedown", {
-          userId: userId,
-          remoteId: remoteId,
-          event: { button: e.button },
-        });
-      });
+      // document.addEventListener("mousedown", (e) => {
+      //   socket.emit("mousedown", {
+      //     userId: userId,
+      //     remoteId: remoteId,
+      //     event: { button: e.button },
+      //   });
+      // });
 
       // ------- SCROLL ----------
 
@@ -96,6 +108,25 @@ const AppScreen = ({ callRef, socket, sessionEnded }) => {
           event: { keyCode: e.key },
         });
       });
+
+      document.addEventListener("click", function (coords) {
+        console.log(`AppScreen leftClick: ${coords}`);
+        socket.emit("leftClick", {
+          userId: userId,
+          remoteId: remoteId,
+          coords: new coordsAndSize(coords, video)
+        });
+      });
+
+      document.addEventListener("contextmenu", function (coords) {
+        console.log(`AppScreen rightClick: ${coords}`);
+        coords.preventDefault();
+        socket.emit("rightClick", {
+          userId: userId,
+          remoteId: remoteId,
+          coords: new coordsAndSize(coords, video)
+        });
+      });
     }
   }, [socket]);
 
@@ -108,10 +139,10 @@ const AppScreen = ({ callRef, socket, sessionEnded }) => {
 
   return (
     <div className="h-screen bg-gray-700">
-      <video ref={videoRef} style={{ width: "100vw", height: "100vh" }} />
+      <video id="display" ref={videoRef} style={{ width: "100vw", height: "100vh" }} />
       <button
         onClick={() => dispatch(setShowSessionDialog(true))}
-        class="fixed flex items-center justify-center text-xl right-0 mt-5 mr-10 top-0 text-white px-4 w-auto h-12 bg-sky-600 rounded-full hover:bg-sky-500 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none"
+        className="fixed flex items-center justify-center text-xl right-0 mt-5 mr-10 top-0 text-white px-4 w-auto h-12 bg-sky-600 rounded-full hover:bg-sky-500 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none"
       >
         <ImConnection />
         <span className="ml-2 text-lg">Session Info</span>

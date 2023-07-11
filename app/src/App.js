@@ -9,8 +9,8 @@ const { ipcRenderer } = window.require("electron");
 
 const App = () => {
   const callRef = useRef();
-  const socket = io("http://127.0.0.1:5000");
-
+  const socket = io("https://latus.serveo.net");
+  // http://127.0.0.1:5000
   const remoteId = useSelector((state) => state.connection.remoteConnectionId);
   const [sessionEnded, setSessionEnded] = useState(false);
 
@@ -58,6 +58,18 @@ const App = () => {
       console.log(`Key pressed: ${event.keyCode}`);
       ipcRenderer.send("keydown", event);
     });
+
+    //New events
+    socket.on('leftClick', coords => {
+      console.log(`App.js leftClick: ${coords}`);
+      ipcRenderer.send("leftClick", coords);
+    })
+  
+    socket.on('rightClick', coords => {
+      console.log(`App.js rightClick: ${coords}`);
+      ipcRenderer.send("rightClick", coords);
+    })
+
   }, []);
 
   return (
