@@ -30,21 +30,31 @@ io.on("connection", function (socket) {
   });
 
   // ------ HANDLE MOUSE AND KEY EVENTS --------
-  socket.on("mousemove", ({ userId, remoteId, event }) => {
-    io.to("User" + remoteId).emit("mousemove", event);
-  });
-
-  // socket.on("mousedown", ({ userId, remoteId, event }) => {
-  //   io.to("User" + remoteId).emit("mousedown", event);
+  // socket.on("mousemove", ({ userId, remoteId, event }) => {
+  //   io.to("User" + remoteId).emit("mousemove", event);
   // });
 
-  socket.on("scroll", ({ userId, remoteId, event }) => {
-    io.to("User" + remoteId).emit("scroll", event);
-  });
+  // // socket.on("mousedown", ({ userId, remoteId, event }) => {
+  // //   io.to("User" + remoteId).emit("mousedown", event);
+  // // });
 
-  socket.on("keydown", ({ userId, remoteId, event }) => {
-    io.to("User" + remoteId).emit("keydown", event);
-  });
+  // socket.on("scroll", ({ userId, remoteId, event }) => {
+  //   io.to("User" + remoteId).emit("scroll", event);
+  // });
+
+  // socket.on("keydown", ({ userId, remoteId, event }) => {
+  //   io.to("User" + remoteId).emit("keydown", event);
+  // });
+
+  // socket.on("event", ({ userId, remoteId, event }) => {
+  //   // Detect when user presses keys on his computer and tell the changes to other user
+  //   console.log(`Event sent by ${userId} to ${remoteId}`);
+
+  //   io.to("User"+remoteId).emit("action", event);
+  //   //socket.broadcast.emit("action", event);
+  // });
+
+  
 
   //New events
   socket.on('leftClick', ({ userId, remoteId, coords }) => {
@@ -57,13 +67,7 @@ io.on("connection", function (socket) {
     io.to("User" + remoteId).emit("rightClick", coords);
   })
 
-  // socket.on("event", ({ userId, remoteId, event }) => {
-  //   // Detect when user presses keys on his computer and tell the changes to other user
-  //   console.log(`Event sent by ${userId} to ${remoteId}`);
-
-  //   io.to("User"+remoteId).emit("action", event);
-  //   //socket.broadcast.emit("action", event);
-  // });
+  
 });
 
 server.listen(5000, () => {

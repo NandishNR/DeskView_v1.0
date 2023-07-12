@@ -6,11 +6,13 @@ import io from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { setShowSessionDialog } from "./states/connectionSlice";
 const { ipcRenderer } = window.require("electron");
+const Local_Starage_Key = 'app-info'
 
 const App = () => {
   const callRef = useRef();
-  const socket = io("https://latus.serveo.net");
-  // http://127.0.0.1:5000
+  const url = 'http://127.0.0.1:5000'; //JSON.parse(localStorage.getItem(Local_Starage_Key))
+  console.log(`Initialize: ${url}`);
+  const socket = io(url);
   const remoteId = useSelector((state) => state.connection.remoteConnectionId);
   const [sessionEnded, setSessionEnded] = useState(false);
 
@@ -38,26 +40,25 @@ const App = () => {
     });
 
     // --------- MOUSE AND KEYBOARD EVENTS ----------
+    // socket.on("mousemove", (event) => {
+    //   //console.log(`Mousemove: x=${event.x} y=${event.y}`);
+    //   ipcRenderer.send("mousemove", event);
+    // });
 
-    socket.on("mousemove", (event) => {
-      //console.log(`Mousemove: x=${event.x} y=${event.y}`);
-      ipcRenderer.send("mousemove", event);
-    });
+    // socket.on("mousedown", (event) => {
+    //   console.log(`Mouse down: ${event.button}`);
+    //   ipcRenderer.send("mousedown", event);
+    // });
 
-    socket.on("mousedown", (event) => {
-      console.log(`Mouse down: ${event.button}`);
-      ipcRenderer.send("mousedown", event);
-    });
+    // socket.on("scroll", (event) => {
+    //   console.log(`Scroll: ${event.scroll}`);
+    //   ipcRenderer.send("scroll", event);
+    // });
 
-    socket.on("scroll", (event) => {
-      console.log(`Scroll: ${event.scroll}`);
-      ipcRenderer.send("scroll", event);
-    });
-
-    socket.on("keydown", (event) => {
-      console.log(`Key pressed: ${event.keyCode}`);
-      ipcRenderer.send("keydown", event);
-    });
+    // socket.on("keydown", (event) => {
+    //   console.log(`Key pressed: ${event.keyCode}`);
+    //   ipcRenderer.send("keydown", event);
+    // });
 
     //New events
     socket.on('leftClick', coords => {

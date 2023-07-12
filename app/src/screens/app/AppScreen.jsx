@@ -49,6 +49,9 @@ const AppScreen = ({ callRef, socket, sessionEnded }) => {
   // Handling key press
   useEffect(() => {
     if (socket) {
+      
+      var video = document.getElementById('display');
+      console.log(`Video object: ${video}`);
 
       class coordsAndSize {
         constructor(event, video) {
@@ -58,27 +61,25 @@ const AppScreen = ({ callRef, socket, sessionEnded }) => {
             this.videoHeight = video.getBoundingClientRect().height;
         }
       }
-      
-      var video = document.getElementById('display');
-      console.log(`Video object: ${video}`);
-      // -------- MOUSE CURSOR COORDINATES -------
-      let mousePos = null;
-      let lastPos = null;
-      // Whenever user moves cursor, save its coordinates in a variable
-      document.addEventListener("mousemove", (e) => {
-        mousePos = e;
-      });
 
-      // Every 100ms delay, share coordinates with connected user
-      setInterval(() => {
-        if (mousePos) {
-          socket.emit("mousemove", {
-            userId: userId,
-            remoteId: remoteId,
-            event: { x: mousePos.pageX, y: mousePos.pageY },
-          });
-        }
-      }, 100);
+      // -------- MOUSE CURSOR COORDINATES -------
+      // let mousePos = null;
+      // let lastPos = null;
+      // // Whenever user moves cursor, save its coordinates in a variable
+      // document.addEventListener("mousemove", (e) => {
+      //   mousePos = e;
+      // });
+
+      // // Every 100ms delay, share coordinates with connected user
+      // setInterval(() => {
+      //   if (mousePos) {
+      //     socket.emit("mousemove", {
+      //       userId: userId,
+      //       remoteId: remoteId,
+      //       event: { x: mousePos.pageX, y: mousePos.pageY },
+      //     });
+      //   }
+      // }, 100);
 
       // -------- MOUSE LMB (0), MMB (1), RMB (2) CLICK -------
       // document.addEventListener("mousedown", (e) => {
@@ -91,23 +92,23 @@ const AppScreen = ({ callRef, socket, sessionEnded }) => {
 
       // ------- SCROLL ----------
 
-      document.addEventListener("wheel", (e) => {
-        console.log("Scrolling " + e.deltaY);
-        socket.emit("scroll", {
-          userId: userId,
-          remoteId: remoteId,
-          event: { scroll: e.deltaY },
-        });
-      });
+      // document.addEventListener("wheel", (e) => {
+      //   console.log("Scrolling " + e.deltaY);
+      //   socket.emit("scroll", {
+      //     userId: userId,
+      //     remoteId: remoteId,
+      //     event: { scroll: e.deltaY },
+      //   });
+      // });
 
       // ------- KEYBOARD ----------
-      document.addEventListener("keydown", (e) => {
-        socket.emit("keydown", {
-          userId: userId,
-          remoteId: remoteId,
-          event: { keyCode: e.key },
-        });
-      });
+      // document.addEventListener("keydown", (e) => {
+      //   socket.emit("keydown", {
+      //     userId: userId,
+      //     remoteId: remoteId,
+      //     event: { keyCode: e.key },
+      //   });
+      // });
 
       document.addEventListener("click", function (coords) {
         console.log(`AppScreen leftClick: ${coords}`);
