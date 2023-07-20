@@ -18,6 +18,10 @@ const server = require("http").createServer(app);
       },
     });
 
+    app.get("/api/sync_time", (req, res) => {
+      res.send([new Date().toISOString()]);
+    });
+
     io.on("connection", function (socket) {
       socket.on("join", function (data) {
         console.log("User joined " + data);
@@ -34,17 +38,31 @@ const server = require("http").createServer(app);
         io.to("User" + remoteId).emit("mousemove", event);
       });
 
-      socket.on("mousedown", ({ userId, remoteId, event }) => {
-        io.to("User" + remoteId).emit("mousedown", event);
+      socket.on("dblclick", ({ userId, remoteId, event }) => {
+        io.to("User" + remoteId).emit("dblclick", event);
       });
-
-      // socket.on("scroll", ({ userId, remoteId, event }) => {
-      //   io.to("User" + remoteId).emit("scroll", event);
-      // });
 
       socket.on("keydown", ({ userId, remoteId, event }) => {
         io.to("User" + remoteId).emit("keydown", event);
       });
+
+      socket.on('leftClick', ({ userId, remoteId, event }) => {
+        console.log(`Server leftClick: ${event}`);
+        io.to("User" + remoteId).emit("leftClick", event);
+      })
+
+      socket.on('rightClick', ({ userId, remoteId, event }) => {
+        console.log(`Server rightClick: ${event}`);
+        io.to("User" + remoteId).emit("rightClick", event);
+      });
+
+      // socket.on("mousedown", ({ userId, remoteId, event }) => {
+      //   io.to("User" + remoteId).emit("mousedown", event);
+      // });
+
+      // socket.on("scroll", ({ userId, remoteId, event }) => {
+      //   io.to("User" + remoteId).emit("scroll", event);
+      // });
 
       // socket.on("event", ({ userId, remoteId, event }) => {
       //   // Detect when user presses keys on his computer and tell the changes to other user
@@ -53,17 +71,6 @@ const server = require("http").createServer(app);
       //   io.to("User"+remoteId).emit("action", event);
       //   //socket.broadcast.emit("action", event);
       // });
-
-      //New events
-      socket.on('leftClick', ({ userId, remoteId, coords }) => {
-        console.log(`Server leftClick: ${coords}`);
-        io.to("User" + remoteId).emit("leftClick", coords);
-      })
-
-      socket.on('rightClick', ({ userId, remoteId, coords }) => {
-        console.log(`Server rightClick: ${coords}`);
-        io.to("User" + remoteId).emit("rightClick", coords);
-      })
 
       // socket.on('mouseDown', coords => {
       //   console.log(`Server mouseDown: ${coords}`);
@@ -77,19 +84,18 @@ const server = require("http").createServer(app);
 
       // socket.on('scroll', delta => {
       //   console.log(`Server scroll: ${delta}`);
-      //   io.to("User").emit("scroll");
+      //   io.to("User").emit("scroll", delta);
       // })
 
-      // socket.on('keyDown', key => {
-      //   console.log(`App.js keyDown : ${key}`);
-      //   io.to("User").emit("keyDown", key);
+      // socket.on('keydown', key => {
+      //   console.log(`App.js keydown : ${key}`);
+      //   io.to("User").emit("keydown", key);
       // })
   
-      // socket.on('keyUp', key => {
-      //   console.log(`App.js keyUp : ${key}`);
-      //   io.to("User").emit("keyUp", key);
+      // socket.on('keyup', key => {
+      //   console.log(`App.js keyup : ${key}`);
+      //   io.to("User").emit("keyup", key);
       // })
-
 
 });
 

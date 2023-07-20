@@ -80,28 +80,20 @@ const AppScreen = ({ callRef, socket, sessionEnded }) => {
           });
         }
       }, 100);
-
-      // -------- MOUSE LMB (0), MMB (1), RMB (2) CLICK -------
-      document.addEventListener("mousedown", (e) => {
-        socket.emit("mousedown", {
+      
+      document.addEventListener("dblclick", (e) => {
+        console.log(`AppScreen dblclick : ${e}`);
+        e.preventDefault();
+        socket.emit("dblclick", {
           userId: userId,
           remoteId: remoteId,
           event: { button: e.button },
         });
       });
 
-      // ------- SCROLL ----------
-      // document.addEventListener("wheel", (e) => {
-      //   console.log("Scrolling " + e.deltaY);
-      //   socket.emit("scroll", {
-      //     userId: userId,
-      //     remoteId: remoteId,
-      //     event: { scroll: e.deltaY },
-      //   });
-      // });
-
-      // // ------- KEYBOARD ----------
       document.addEventListener("keydown", (e) => {
+        console.log(`AppScreen keydown : ${e}`);
+        e.preventDefault();
         socket.emit("keydown", {
           userId: userId,
           remoteId: remoteId,
@@ -109,25 +101,44 @@ const AppScreen = ({ callRef, socket, sessionEnded }) => {
         });
       });
 
-      video.addEventListener("click", function (coords) {
-        console.log(`AppScreen leftClick : ${coords}`);
-        coords.preventDefault();
+      video.addEventListener("click", function (e) {
+        console.log(`AppScreen leftClick : ${e}`);
+        e.preventDefault();
         socket.emit("leftClick", {
           userId: userId,
           remoteId: remoteId,
-          coords: new coordsAndSize(coords, video)
+          event: new coordsAndSize(e, video)
         });
       });
 
-      video.addEventListener("contextmenu", function (coords) {
-        console.log(`AppScreen rightClick : ${coords}`);
-        coords.preventDefault();
+      video.addEventListener("contextmenu", function (e) {
+        console.log(`AppScreen rightClick : ${e}`);
+        e.preventDefault();
         socket.emit("rightClick", {
           userId: userId,
           remoteId: remoteId,
-          coords: new coordsAndSize(coords, video)
+          event: new coordsAndSize(e, video)
         });
       });
+
+      // -------- MOUSE LMB (0), MMB (1), RMB (2) CLICK -------
+      // document.addEventListener("mousedown", (e) => {
+      //   socket.emit("mousedown", {
+      //     userId: userId,
+      //     remoteId: remoteId,
+      //     event: { button: e.button },
+      //   });
+      // });
+
+      // ------- SCROLL ----------
+      // document.addEventListener("wheel", (e) => {
+      //   console.log("AppScreen Scrolling " + e.deltaY);
+      //   socket.emit("scroll", {
+      //     userId: userId,
+      //     remoteId: remoteId,
+      //     event: { scroll: e.deltaY },
+      //   });
+      // });
 
       // video.addEventListener("mouseDown", function (coords) {
       //   console.log(`AppScreen mouseDown : ${coords}`);
@@ -141,7 +152,8 @@ const AppScreen = ({ callRef, socket, sessionEnded }) => {
       // })
 
       // video.addEventListener('wheel', function(event) {
-      //   console.log(`AppScreen wheel`);
+      //   console.log(`AppScreen wheel x: ${event.deltaX}`);
+      //   console.log(`AppScreen wheel y: ${event.deltaY}`);
       //   socket.emit('scroll', {
       //       x: event.deltaX,
       //       y: event.deltaY,
@@ -150,15 +162,13 @@ const AppScreen = ({ callRef, socket, sessionEnded }) => {
 
       // window.addEventListener('keydown', function (event) {
       //   console.log(`AppScreen keydown : ${event.key}`);
-      //   socket.emit('keyDown', event.key)
+      //   socket.emit('keydown', event.key)
       // })
 
       // window.addEventListener('keyup', function (event) {
-      //   console.log(`AppScreen keydown : ${event.key}`);
-      //     socket.emit('keyUp', event.key)
-      // })      
-
-
+      //   console.log(`AppScreen keyup : ${event.key}`);
+      //     socket.emit('keyup', event.key)
+      // })
     }
   }, [socket]);
 

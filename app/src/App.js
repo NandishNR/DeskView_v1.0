@@ -44,31 +44,33 @@ const App = () => {
       ipcRenderer.send("mousemove", event);
     });
 
-    socket.on("mousedown", (event) => {
-      console.log(`Mouse down: ${event.button}`);
-      ipcRenderer.send("mousedown", event);
+    socket.on("dblclick", (event) => {
+      ipcRenderer.send("dblclick", event);
     });
 
-    // socket.on("scroll", (event) => {
-    //   console.log(`Scroll: ${event.scroll}`);
-    //   ipcRenderer.send("scroll", event);
-    // });
-
     socket.on("keydown", (event) => {
-      console.log(`Key pressed: ${event.keyCode}`);
+      console.log(`App.js Key pressed: ${event.keyCode}`);
       ipcRenderer.send("keydown", event);
     });
 
-    //New events
-    socket.on('leftClick', coords => {
-      console.log(`App.js leftClick : ${coords}`);
-      ipcRenderer.send("leftClick", coords);
+    socket.on('leftClick', event => {
+      console.log(`App.js leftClick : ${event}`);
+      ipcRenderer.send("leftClick", event);
     })
   
-    socket.on('rightClick', coords => {
-      console.log(`App.js rightClick : ${coords}`);
-      ipcRenderer.send("rightClick", coords);
+    socket.on('rightClick', event => {
+      console.log(`App.js rightClick : ${event}`);
+      ipcRenderer.send("rightClick", event);
     })
+
+    // socket.on("mousedown", (event) => {
+    //   ipcRenderer.send("mousedown", event);
+    // });
+
+    // socket.on("scroll", (event) => {
+    //   console.log(`App.js scroll: ${event.scroll}`);
+    //   ipcRenderer.send("scroll", event);
+    // });
 
     // socket.on('mouseDown', coords => {
     //   console.log(`App.js mouseDown : ${coords}`);
@@ -85,14 +87,14 @@ const App = () => {
     //   ipcRenderer.send("wheel");
     // })
 
-    // socket.on('keyDown', key => {
-    //   console.log(`App.js keyDown : ${key}`);
-    //   ipcRenderer.send("keyDown", key);
+    // socket.on('keydown', key => {
+    //   console.log(`App.js keydown : ${key}`);
+    //   ipcRenderer.send("keydown", key);
     // })
 
-    // socket.on('keyUp', key => {
-    //   console.log(`App.js keyUp : ${key}`);
-    //   ipcRenderer.send("keyDown", key);
+    // socket.on('keyup', key => {
+    //   console.log(`App.js keyup : ${key}`);
+    //   ipcRenderer.send("keyup", key);
     // })
 
   }, []);

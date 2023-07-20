@@ -48,76 +48,62 @@ const dict = require('./dict');
     });
 
     // --------- HANDLE KEYBOARD AND MOUSE EVENTS -------
-
-    //robot.moveMouseSmooth(100, 180);
-    //robot.mouseClick();
-    //robot.scrollMouse(0, -200);
-    //robot.keyTap("command")
-
     ipcMain.on("mousemove", (event, args) => {
       robot.moveMouseSmooth(args.x, args.y);
     });
 
-    ipcMain.on("mousedown", (event, args) => {
-      console.log(`Mouse down: ${args.button}`);
-      robot.mouseClick();
+    ipcMain.on("dblclick", (event, args) => {
+      robot.mouseClick('left', true);
     });
 
-    // ipcMain.on("scroll", (event, args) => {
-    //   console.log(`Scroll: ${args.scroll}`);
-    //   robot.scrollMouse(0, args.scroll);
-    // });
-
     ipcMain.on("keydown", (event, args) => {
-      console.log(`Key pressed: ${args.keyCode}`);
       //TODO: Handle modifiers keys
       robot.keyTap(args.keyCode);
     });
 
-    //New events
-    function convertCoord(coords, xy) {
-      if (xy === 'x') {
-          const xVal= (robot.getScreenSize().width * coords.x) / coords.videoWidth;
-          console.log(`electron.js leftClick: ${xVal}` );
-          return xVal;
-      } else if (xy === 'y') {
-        const yVal = (robot.getScreenSize().height * coords.y) / coords.videoHeight;
-          console.log(`electron.js leftClick: ${yVal}` );
-          return yVal;
-      } else {
-          return;
-      }
-    }
-
-    ipcMain.on("leftClick", (coords) => {
-      console.log(`electron.js leftClick: ${coords}` );
-      //robot.moveMouse(convertCoord(coords, 'x'), convertCoord(coords, 'y'));
+    ipcMain.on("leftClick", (event, args) => {
       robot.mouseClick('left');
     });
 
-    ipcMain.on("rightClick", (coords) => {
-      console.log(`electron.js rightClick: ${coords}` );
-      //robot.moveMouse(convertCoord(coords, 'x'), convertCoord(coords, 'y'));
+    ipcMain.on("rightClick", (event, args) => {
       robot.mouseClick('right');
     });
 
+    // function convertCoord(coords, xy) {
+    //   if (xy === 'x') {
+    //       const xVal= (robot.getScreenSize().width * coords.x) / coords.videoWidth;
+    //       return xVal;
+    //   } else if (xy === 'y') {
+    //     const yVal = (robot.getScreenSize().height * coords.y) / coords.videoHeight;
+    //       return yVal;
+    //   } else {
+    //       return;
+    //   }
+    // }
+
+    // ipcMain.on("mousedown", (event, args) => {
+    //   console.log(`Mouse down: ${args.button}`);
+    //   robot.mouseClick();
+    // });
+
+    // ipcMain.on("scroll", (event, args) => {
+    //   robot.scrollMouse(0, args.scroll);
+    // });
+
     // ipcMain.on('mouseDown', coords => {
-    //   console.log(`electron.js mouseDown: ${coords}` );
     //   robot.moveMouse(convertCoord(coords, 'x'), convertCoord(coords, 'y'));
     //   robot.mouseToggle('down');
     // })
 
     // ipcMain.on('mouseUp', () => {
-    //   console.log(`electron.js mouseUp` );
     //   robot.mouseToggle('up');
     // })
 
     // ipcMain.on('scroll', delta => {
-    //   console.log(`electron.js mouseUp` );
     //   robot.scrollMouse(delta.x, delta.y);
     // })
 
-    // ipcMain.on('keyDown', key => {
+    // ipcMain.on('keydown', key => {
     //   if (key.length !== 1 && key !== ' ') {
     //       key = dict[key];
     //   }
@@ -129,7 +115,7 @@ const dict = require('./dict');
     //     }
     //   })
 
-    //   ipcMain.on('keyUp', key => {
+    //   ipcMain.on('keyup', key => {
     //       if (key.length !== 1 && key !== ' ') {
     //           key = dict[key];
     //       }
