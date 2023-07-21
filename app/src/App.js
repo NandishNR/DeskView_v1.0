@@ -20,56 +20,56 @@ const App = () => {
   useEffect(() => {
     socket.on("connect", () => {
       console.log("Socket connected");
-    });
+    })
 
     socket.on("connect_error", (e) => {
       console.log("Socket connection error, retrying..." + e);
       setTimeout(() => socket.connect(), 5000);
-    });
+    })
 
     socket.on("disconnect", () => {
       console.log("Socket disconnected");
       if (remoteId) {
         socket.emit("remotedisconnected", { remoteId: remoteId });
       }
-    });
+    })
 
     socket.on("remotedisconnected", () => {
       //alert("Remote disconnected");
       setSessionEnded(true);
-    });
+    })
 
     // --------- MOUSE AND KEYBOARD EVENTS ----------
     socket.on("mousemove", (event) => {
       ipcRenderer.send("mousemove", event);
-    });
+    })
 
     socket.on("dblclick", (event) => {
       ipcRenderer.send("dblclick", event);
-    });
+    })
 
     socket.on("keydown", (event) => {
-      console.log(`App.js Key pressed: ${event.keyCode}`);
+      console.log(`App keydown: ${event.keyCode}`);
       ipcRenderer.send("keydown", event);
-    });
+    })
 
-    socket.on('leftClick', event => {
-      console.log(`App.js leftClick : ${event}`);
+    socket.on("leftClick", (event) => {
+      console.log(`App leftClick : ${event}`);
       ipcRenderer.send("leftClick", event);
     })
   
-    socket.on('rightClick', event => {
-      console.log(`App.js rightClick : ${event}`);
+    socket.on("rightClick", (event) => {
+      console.log(`App rightClick : ${event}`);
       ipcRenderer.send("rightClick", event);
+    })
+
+    socket.on("wheel", (event) => {
+      console.log(`App wheel entered x & y: ${event.x} & ${event.y}`);
+      ipcRenderer.send("wheel", event);
     })
 
     // socket.on("mousedown", (event) => {
     //   ipcRenderer.send("mousedown", event);
-    // });
-
-    // socket.on("scroll", (event) => {
-    //   console.log(`App.js scroll: ${event.scroll}`);
-    //   ipcRenderer.send("scroll", event);
     // });
 
     // socket.on('mouseDown', coords => {
@@ -80,11 +80,6 @@ const App = () => {
     // socket.on('mouseUp', () => {
     //   console.log(`App.js mouseUp`);
     //   ipcRenderer.send("mouseUp");
-    // })
-
-    // socket.on('wheel', () => {
-    //   console.log(`App.js wheel`);
-    //   ipcRenderer.send("wheel");
     // })
 
     // socket.on('keydown', key => {

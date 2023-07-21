@@ -68,7 +68,7 @@ const AppScreen = ({ callRef, socket, sessionEnded }) => {
       // Whenever user moves cursor, save its coordinates in a variable
       document.addEventListener("mousemove", (e) => {
         mousePos = e;
-      });
+      })
 
       // Every 100ms delay, share coordinates with connected user
       setInterval(() => {
@@ -79,7 +79,7 @@ const AppScreen = ({ callRef, socket, sessionEnded }) => {
             event: { x: mousePos.pageX, y: mousePos.pageY },
           });
         }
-      }, 100);
+      }, 100)
       
       document.addEventListener("dblclick", (e) => {
         console.log(`AppScreen dblclick : ${e}`);
@@ -89,7 +89,7 @@ const AppScreen = ({ callRef, socket, sessionEnded }) => {
           remoteId: remoteId,
           event: { button: e.button },
         });
-      });
+      })
 
       document.addEventListener("keydown", (e) => {
         console.log(`AppScreen keydown : ${e}`);
@@ -99,9 +99,9 @@ const AppScreen = ({ callRef, socket, sessionEnded }) => {
           remoteId: remoteId,
           event: { keyCode: e.key },
         });
-      });
+      })
 
-      video.addEventListener("click", function (e) {
+      document.addEventListener("click", (e) => {
         console.log(`AppScreen leftClick : ${e}`);
         e.preventDefault();
         socket.emit("leftClick", {
@@ -109,9 +109,9 @@ const AppScreen = ({ callRef, socket, sessionEnded }) => {
           remoteId: remoteId,
           event: new coordsAndSize(e, video)
         });
-      });
+      })
 
-      video.addEventListener("contextmenu", function (e) {
+      document.addEventListener("contextmenu", (e) => {
         console.log(`AppScreen rightClick : ${e}`);
         e.preventDefault();
         socket.emit("rightClick", {
@@ -119,7 +119,17 @@ const AppScreen = ({ callRef, socket, sessionEnded }) => {
           remoteId: remoteId,
           event: new coordsAndSize(e, video)
         });
-      });
+      })
+
+      document.addEventListener("wheel", (e) => {
+        console.log(`AppScreen entered wheel coordinates x & y: ${e.deltaX} & ${e.deltaY}`);
+        socket.emit("wheel", {
+          userId: userId,
+          remoteId: remoteId,
+          event: { x: e.deltaX, y: e.deltaY },
+        });
+        console.log(`AppScreen exited wheel coordinates x & y: ${e.deltaX} & ${e.deltaY}`);
+      })
 
       // -------- MOUSE LMB (0), MMB (1), RMB (2) CLICK -------
       // document.addEventListener("mousedown", (e) => {
@@ -127,16 +137,6 @@ const AppScreen = ({ callRef, socket, sessionEnded }) => {
       //     userId: userId,
       //     remoteId: remoteId,
       //     event: { button: e.button },
-      //   });
-      // });
-
-      // ------- SCROLL ----------
-      // document.addEventListener("wheel", (e) => {
-      //   console.log("AppScreen Scrolling " + e.deltaY);
-      //   socket.emit("scroll", {
-      //     userId: userId,
-      //     remoteId: remoteId,
-      //     event: { scroll: e.deltaY },
       //   });
       // });
 
@@ -149,15 +149,6 @@ const AppScreen = ({ callRef, socket, sessionEnded }) => {
       //   console.log(`AppScreen mouseup`);
       //   socket.emit('mouseUp');
       //   //isDraggingMouse = false;
-      // })
-
-      // video.addEventListener('wheel', function(event) {
-      //   console.log(`AppScreen wheel x: ${event.deltaX}`);
-      //   console.log(`AppScreen wheel y: ${event.deltaY}`);
-      //   socket.emit('scroll', {
-      //       x: event.deltaX,
-      //       y: event.deltaY,
-      //   })
       // })
 
       // window.addEventListener('keydown', function (event) {

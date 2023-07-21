@@ -39,35 +39,39 @@ const dict = require('./dict');
       if (process.platform !== "darwin") {
         app.quit();
       }
-    });
+    })
 
     app.on("activate", () => {
       if (BrowserWindow.getAllWindows().length === 0) {
         createWindow();
       }
-    });
+    })
 
     // --------- HANDLE KEYBOARD AND MOUSE EVENTS -------
     ipcMain.on("mousemove", (event, args) => {
       robot.moveMouseSmooth(args.x, args.y);
-    });
+    })
 
     ipcMain.on("dblclick", (event, args) => {
-      robot.mouseClick('left', true);
-    });
+      robot.mouseClick("left", true);
+    })
 
     ipcMain.on("keydown", (event, args) => {
       //TODO: Handle modifiers keys
       robot.keyTap(args.keyCode);
-    });
+    })
 
     ipcMain.on("leftClick", (event, args) => {
-      robot.mouseClick('left');
-    });
+      robot.mouseClick("left");
+    })
 
     ipcMain.on("rightClick", (event, args) => {
-      robot.mouseClick('right');
-    });
+      robot.mouseClick("right");
+    })
+
+    ipcMain.on("wheel", (event, args) => {
+      robot.scrollMouse(args.x, args.y);
+    })
 
     // function convertCoord(coords, xy) {
     //   if (xy === 'x') {
@@ -86,10 +90,6 @@ const dict = require('./dict');
     //   robot.mouseClick();
     // });
 
-    // ipcMain.on("scroll", (event, args) => {
-    //   robot.scrollMouse(0, args.scroll);
-    // });
-
     // ipcMain.on('mouseDown', coords => {
     //   robot.moveMouse(convertCoord(coords, 'x'), convertCoord(coords, 'y'));
     //   robot.mouseToggle('down');
@@ -97,10 +97,6 @@ const dict = require('./dict');
 
     // ipcMain.on('mouseUp', () => {
     //   robot.mouseToggle('up');
-    // })
-
-    // ipcMain.on('scroll', delta => {
-    //   robot.scrollMouse(delta.x, delta.y);
     // })
 
     // ipcMain.on('keydown', key => {

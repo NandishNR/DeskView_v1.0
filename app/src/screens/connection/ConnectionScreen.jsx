@@ -174,7 +174,7 @@ const ConnectionScreen = ({ callRef, socket }) => {
             alt="logo"
           /> */}
           <div className="font-semibold text-3xl mt-4">DeskViewer</div>
-          <div className="font-regular text-md">Version 1.26</div>
+          <div className="font-regular text-md">Version 1.34</div>
         </div>
       </div>
       <div className="bg-white basis-1/2 flex flex-col items-center justify-center">

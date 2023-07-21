@@ -16,52 +16,53 @@ const server = require("http").createServer(app);
       cors: {
         origin: "*",
       },
-    });
+    })
 
     app.get("/api/sync_time", (req, res) => {
       res.send([new Date().toISOString()]);
-    });
+    })
 
     io.on("connection", function (socket) {
       socket.on("join", function (data) {
         console.log("User joined " + data);
         // Create a room for client
         socket.join(data);
-      });
+      })
 
       socket.on("remotedisconnected", ({ remoteId }) => {
         io.to("User" + remoteId).emit("remotedisconnected");
-      });
+      })
 
       // ------ HANDLE MOUSE AND KEY EVENTS --------
       socket.on("mousemove", ({ userId, remoteId, event }) => {
         io.to("User" + remoteId).emit("mousemove", event);
-      });
+      })
 
       socket.on("dblclick", ({ userId, remoteId, event }) => {
         io.to("User" + remoteId).emit("dblclick", event);
-      });
+      })
 
       socket.on("keydown", ({ userId, remoteId, event }) => {
         io.to("User" + remoteId).emit("keydown", event);
-      });
+      })
 
-      socket.on('leftClick', ({ userId, remoteId, event }) => {
+      socket.on("leftClick", ({ userId, remoteId, event }) => {
         console.log(`Server leftClick: ${event}`);
         io.to("User" + remoteId).emit("leftClick", event);
       })
 
-      socket.on('rightClick', ({ userId, remoteId, event }) => {
+      socket.on("rightClick", ({ userId, remoteId, event }) => {
         console.log(`Server rightClick: ${event}`);
         io.to("User" + remoteId).emit("rightClick", event);
-      });
+      })
+
+      socket.on("wheel", ({ userId, remoteId, event }) => {
+        console.log(`Server wheel: ${event}`);
+        io.to("User" + remoteId).emit("wheel", event);
+      })
 
       // socket.on("mousedown", ({ userId, remoteId, event }) => {
       //   io.to("User" + remoteId).emit("mousedown", event);
-      // });
-
-      // socket.on("scroll", ({ userId, remoteId, event }) => {
-      //   io.to("User" + remoteId).emit("scroll", event);
       // });
 
       // socket.on("event", ({ userId, remoteId, event }) => {
@@ -80,11 +81,6 @@ const server = require("http").createServer(app);
       // socket.on('mouseUp', () => {
       //   console.log(`Server mouseUp`);
       //   io.to("User").emit("mouseUp");
-      // })
-
-      // socket.on('scroll', delta => {
-      //   console.log(`Server scroll: ${delta}`);
-      //   io.to("User").emit("scroll", delta);
       // })
 
       // socket.on('keydown', key => {
