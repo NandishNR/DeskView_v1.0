@@ -11,10 +11,11 @@ import {
 import { ImConnection } from "react-icons/im";
 import { Navigate, useNavigate } from "react-router-dom";
 
-const AppScreen = ({ callRef, socket, sessionEnded }) => {
+  const AppScreen = ({ callRef, socket, sessionEnded }) => {
   const videoRef = useRef();
   const [remoteConnecting, setRemoteConnecting] = useState(true);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch();  
+  const dict = require('./dict');
 
   const showSessionDialog = useSelector(
     (state) => state.connection.showSessionDialog
@@ -92,12 +93,36 @@ const AppScreen = ({ callRef, socket, sessionEnded }) => {
       })
 
       document.addEventListener("keydown", (e) => {
-        console.log(`AppScreen keydown : ${e}`);
+        console.log(`AppScreen keydown : ${e.key}`);
         e.preventDefault();
+
+        var key = e.key;
+        if (key.length !== 1 && key !== ' ') {
+            key = dict[key];
+        }
+
+        console.log(`AppScreen keydown from dict: ${key}`);
         socket.emit("keydown", {
           userId: userId,
           remoteId: remoteId,
-          event: { keyCode: e.key },
+          event: { keyCode: key },
+        });
+      })
+
+      document.addEventListener("keyup", (e) => {
+        console.log(`AppScreen keyup : ${e.key}`);
+        e.preventDefault();
+
+        var key = e.key;
+        if (key.length !== 1 && key !== ' ') {
+            key = dict[key];
+        }
+
+        console.log(`AppScreen keyup from dict: ${key}`);
+        socket.emit("keyup", {
+          userId: userId,
+          remoteId: remoteId,
+          event: { keyCode: key },
         });
       })
 

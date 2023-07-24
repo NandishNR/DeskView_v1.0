@@ -53,6 +53,11 @@ const App = () => {
       ipcRenderer.send("keydown", event);
     })
 
+    socket.on("keyup", (event) => {
+      console.log(`App keyup: ${event.keyCode}`);
+      ipcRenderer.send("keyup", event);
+    })
+
     socket.on("leftClick", (event) => {
       console.log(`App leftClick : ${event}`);
       ipcRenderer.send("leftClick", event);

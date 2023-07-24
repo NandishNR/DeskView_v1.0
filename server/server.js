@@ -46,6 +46,10 @@ const server = require("http").createServer(app);
         io.to("User" + remoteId).emit("keydown", event);
       })
 
+      socket.on("keyup", ({ userId, remoteId, event }) => {
+        io.to("User" + remoteId).emit("keyup", event);
+      })
+
       socket.on("leftClick", ({ userId, remoteId, event }) => {
         console.log(`Server leftClick: ${event}`);
         io.to("User" + remoteId).emit("leftClick", event);

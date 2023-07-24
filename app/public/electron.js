@@ -2,7 +2,6 @@ const path = require("path");
 const { app, BrowserWindow } = require("electron");
 const robot = require("robotjs");
 const { desktopCapturer, ipcMain } = require("electron");
-const dict = require('./dict');
 
     let win;
     function createWindow() {
@@ -57,8 +56,11 @@ const dict = require('./dict');
     })
 
     ipcMain.on("keydown", (event, args) => {
-      //TODO: Handle modifiers keys
-      robot.keyTap(args.keyCode);
+      robot.keyToggle(args.keyCode,'down');
+    })
+
+    ipcMain.on("keyup", (event, args) => {
+      robot.keyToggle(args.keyCode,'up');
     })
 
     ipcMain.on("leftClick", (event, args) => {
